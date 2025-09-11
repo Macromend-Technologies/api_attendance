@@ -14,6 +14,7 @@ api_attendance_urls = [
     path("user-list/", UsersListView.as_view(), name="user_list"),
     path("user-register/", UserRegisterView.as_view(), name="user_create"),
     
+    
     ]
 
 urlpatterns =  api_attendance_urls
