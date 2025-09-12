@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from app.auth import LoginAPIView, TokenRefreshUserView, VerifyAccessTokenView
-from app.views.users import UserRegisterView, UsersListView
+from app.views.users import GoogleLogin, UserRegisterView, UsersListView
 
 api_attendance_urls = [
     
@@ -13,6 +13,7 @@ api_attendance_urls = [
     # User 
     path("user-list/", UsersListView.as_view(), name="user_list"),
     path("user-register/", UserRegisterView.as_view(), name="user_create"),
+    path("google_login/", GoogleLogin.as_view(), name="google_login"),
     
     ]
 
