@@ -1,7 +1,10 @@
 import email
+import random
+import string
 from app.auth import User
 from app.core import BaseCORSExemptAPIView
 from app.models.user_model import CustomUser
+from app.models.usermail_model import CompanyUserMails
 from app.response import CustomResponse
 from app.serializers.users import DevicesSerializer, LocationSerializer, UserSerializer
 from rest_framework import status
@@ -38,7 +41,6 @@ class UserRegisterView(BaseCORSExemptAPIView):
             location_data = request.data.get("location")
             device_data = request.data.get("device")
             with transaction.atomic():
-                # Create user
                 user_serializer = UserSerializer(data=user_data)
                 user_serializer.is_valid(raise_exception=True)
                 user = user_serializer.save()
@@ -67,10 +69,14 @@ class UserRegisterView(BaseCORSExemptAPIView):
                 errors=str(e),
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-        
-## google login 
+
 class GoogleLogin(BaseCORSExemptAPIView):
     permission_classes = []  # allow public access
+
+    def generate_password(self, length=8):
+        chars = string.ascii_letters + string.digits + "!@#$%^&*()"
+        return ''.join(random.choice(chars) for _ in range(length))
+
     def post(self, request):
         try:
             user_data = request.data.get("users")
@@ -84,30 +90,44 @@ class GoogleLogin(BaseCORSExemptAPIView):
                 refresh = RefreshToken.for_user(user)
                 return CustomResponse.success(
                     data={
-                        "users": {
-                            "id": user.id,
-                            "name": user.name,
-                            "email": user.email,
-                        },
-                        "access": str(refresh.access_token),
-                        "refresh": str(refresh),
+                        "access_token": str(refresh.access_token),
+                        "refresh_token": str(refresh),
+                        "user_details": UserSerializer(user).data,
                     },
                     message="User login successfully.",
                     status_code=status.HTTP_200_OK,
                 )
-            # 2. New user create (with validation)
+
+            # 2. New user create only if mail exists in CompanyUserMails
+            user_mail = CompanyUserMails.objects.filter(email=email).first()
+            if not user_mail:
+                return CustomResponse.error(
+                    message="Error creating user",
+                    errors="Contact HR - Invalid User",
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
+
             with transaction.atomic():
-                # validate & create user
+                # Auto generate password
+                generated_password = self.generate_password()
+                user_data["password"] = generated_password
+
+                # Create user
                 user_serializer = UserSerializer(data=user_data)
                 user_serializer.is_valid(raise_exception=True)
                 user = user_serializer.save()
+
+                # ✅ Assign role (ForeignKey fix)
+                if user_mail.role:
+                    user.role = user_mail.role
+                    user.save()
 
                 # validate & create device
                 device_response = None
                 if device_data:
                     device_data["user"] = user.id
                     device_serializer = DevicesSerializer(data=device_data)
-                    device_serializer.is_valid(raise_exception=True)  # datatype check
+                    device_serializer.is_valid(raise_exception=True)
                     device_response = device_serializer.save()
 
                 # validate & create location
@@ -115,18 +135,19 @@ class GoogleLogin(BaseCORSExemptAPIView):
                 if location_data:
                     location_data["user"] = user.id
                     location_serializer = LocationSerializer(data=location_data)
-                    location_serializer.is_valid(raise_exception=True)  # datatype check
+                    location_serializer.is_valid(raise_exception=True)
                     location_response = location_serializer.save()
 
                 refresh = RefreshToken.for_user(user)
 
             return CustomResponse.success(
                 data={
-                    "users": UserSerializer(user).data,
-                    "device": DevicesSerializer(device_response).data if device_response else None,
-                    "location": LocationSerializer(location_response).data if location_response else None,
-                    "access": str(refresh.access_token),
-                    "refresh": str(refresh),
+                  
+                
+                    "access_token": str(refresh.access_token),
+                    "refresh_token": str(refresh),
+                      "user_details": UserSerializer(user).data,
+         
                 },
                 message="User created successfully.",
                 status_code=status.HTTP_201_CREATED,
@@ -135,6 +156,6 @@ class GoogleLogin(BaseCORSExemptAPIView):
         except Exception as e:
             return CustomResponse.error(
                 message="Error creating user",
-                errors=str(e),   # serializer error msg return pannum
+                errors=str(e),
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
