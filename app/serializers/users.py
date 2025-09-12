@@ -12,6 +12,7 @@ class LocationSerializer(serializers.ModelSerializer):
             "latitude",
             "longitude",
         ]
+        extra_kwargs = {"user": {"write_only": True}}
         
 class DevicesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,28 +23,38 @@ class DevicesSerializer(serializers.ModelSerializer):
             "device_name",
             "finger_print",
         ]
-
+        extra_kwargs = {"user": {"write_only": True}}
 
 class UserSerializer(serializers.ModelSerializer):
-    location = serializers.SerializerMethodField()
-    device = serializers.SerializerMethodField()
-
+    password = serializers.CharField(write_only=True, required=True)
     class Meta:
         model = CustomUser
         fields = [
             "id",
             "email",
             "name",
-            "mobile",
-            "location",  
-            "device"     
+            "mobile", 
+            "password"
         ]
-    def get_location(self, obj):
-        last = obj.user_location.order_by("-id").first()
-        return LocationSerializer(last).data if last else None
+        extra_kwargs = {
+            "password": {"write_only": True}  # 🔥 hide password in response
+        }
+    def create(self, validated_data):
+        print("validated_data",validated_data)
+        password = validated_data.pop("password", None)
+        user = CustomUser(**validated_data)
+        if password:
+            user.set_password(password)  # 🔥 hash password
+        user.save()
+        return user
 
-    def get_device(self, obj):
-        last = obj.user_device.order_by("-id").first()
-        return DevicesSerializer(last).data if last else None
-
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        if password:
+            instance.set_password(password)  # 🔥 update with hash
+        instance.save()
+        return instance
+ 
  

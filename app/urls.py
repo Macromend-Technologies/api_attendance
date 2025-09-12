@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from app.auth import LoginAPIView, TokenRefreshUserView, VerifyAccessTokenView
 from app.views.company import CompanyUserMailsDetailView, MailListCreateView
 from app.views.roles import AccessTypesDetailView, AccessTypesListCreateView, RoleDetailView, RoleListCreateView
-from app.views.users import UserRegisterView, UsersListView
+from app.views.users import UserRegisterView, UsersDetailsList, UsersDetailsView
 
 api_attendance_urls = [
     # Auth 
@@ -13,7 +13,8 @@ api_attendance_urls = [
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # User 
-    path("user-list/", UsersListView.as_view(), name="user_list"),
+    path("user-list/", UsersDetailsList.as_view(), name="user_list"),
+    path("user-details/<int:pk>/", UsersDetailsView.as_view(), name="user_details"),
     path("user-register/", UserRegisterView.as_view(), name="user_create"),
     # Role & Access
     path("access-types/", AccessTypesListCreateView.as_view(), name="access_list_create"),
@@ -23,6 +24,7 @@ api_attendance_urls = [
     # Company -Datils
     path("mail-create-list/", MailListCreateView.as_view(), name="mail-list"),
     path("mail-details/<int:pk>/", CompanyUserMailsDetailView.as_view(), name="mail-details"),
+    
     ]
 
 urlpatterns =  api_attendance_urls
