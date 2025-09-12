@@ -34,7 +34,6 @@ class UserRegisterView(BaseCORSExemptAPIView):
             location_data = request.data.get("location")
             device_data = request.data.get("device")
             with transaction.atomic():
-                # Create user
                 user_serializer = UserSerializer(data=user_data)
                 user_serializer.is_valid(raise_exception=True)
                 user = user_serializer.save()
