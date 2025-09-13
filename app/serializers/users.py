@@ -35,6 +35,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "name",
             "mobile",
+        
             # "location",  
             # "device"     
         ]
