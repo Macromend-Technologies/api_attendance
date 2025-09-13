@@ -1,3 +1,6 @@
+import random
+import string
+from app.auth import User
 from app.core import BaseCORSExemptAPIView
 from app.models.user_model import CustomUser
 from app.models.usermail_model import CompanyUserMails
@@ -6,6 +9,7 @@ from app.serializers.users import DevicesSerializer, LocationSerializer, UserSer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
+from rest_framework_simplejwt.tokens import RefreshToken
 
  
             
