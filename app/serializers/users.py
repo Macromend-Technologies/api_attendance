@@ -36,8 +36,9 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "name",
             "mobile",
-            "location",  
-            "device"     
+        
+            # "location",  
+            # "device"     
         ]
     def get_location(self, obj):
         last = obj.user_location.order_by("-id").first()

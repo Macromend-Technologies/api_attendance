@@ -7,7 +7,6 @@ from django.contrib.auth.models import (
     PermissionsMixin
  
 )
-
 from app.models.base_model import BaseModel
 from django.utils import timezone
 import uuid
@@ -42,6 +41,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin,BaseModel):
     name  = models.CharField(max_length=25,null=False,blank=False)
     email =models.EmailField(unique=True,null=False,max_length=50)
     mobile =models.IntegerField(unique=True,null=True ,blank=False)
+    role = models.ForeignKey("app.Roles", on_delete=models.CASCADE, related_name="user_role",null=True)
     is_staff = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
