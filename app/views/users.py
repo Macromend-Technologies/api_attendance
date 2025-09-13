@@ -1,4 +1,3 @@
-import email
 import random
 import string
 from app.auth import User
@@ -11,26 +10,8 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import get_user_model
-User = get_user_model()
-class UsersListView(BaseCORSExemptAPIView):
-    permission_classes = [IsAuthenticated]
-    def post(self, request):
-        try:
-            users = CustomUser.objects.all()
-            serializer = UserSerializer(users, many=True)
-            return CustomResponse.success(
-                data=serializer.data,
-                message="Users retrieved successfully.",
-                status_code=status.HTTP_200_OK,
-            )
-        except Exception as e:
-            
-            return CustomResponse.error(
-                errors=str(e),
-                message="Error retrieving users.",
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+
+ 
             
 class UserRegisterView(BaseCORSExemptAPIView):
     permission_classes = []  # allow public access
@@ -175,12 +156,12 @@ class GoogleLogin(BaseCORSExemptAPIView):
                 data={**tokens, "user_details": UserSerializer(user).data},
                 status_code=status.HTTP_201_CREATED,
             )
-
         except Exception as e:
             return CustomResponse.error(
                 message="Error processing request",
                 errors=str(e),
-                status_code=status.HTTP_400_BAD_REQUEST,
+                message="Error deleting user.",
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
 

@@ -9,6 +9,7 @@ from django.contrib.auth.models import (
 )
 from app.models.base_model import BaseModel
 from django.utils import timezone
+import uuid
 from app.models.role_model import Roles
  
 class CustomUserManager(BaseUserManager):
@@ -34,8 +35,9 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
- 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin,BaseModel):
+    uuid = models.UUIDField(unique=True,default=uuid.uuid4,editable=False)
     name  = models.CharField(max_length=25,null=False,blank=False)
     email =models.EmailField(unique=True,null=False,max_length=50)
     mobile =models.IntegerField(unique=True,null=True ,blank=False)

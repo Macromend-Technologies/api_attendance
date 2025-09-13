@@ -11,9 +11,10 @@ from app.serializers.users import UserSerializer
  
 # Login  
 class LoginAPIView(BaseCORSExemptAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [ ]
 
     def post(self, request, *args, **kwargs):
+
         email = request.data.get("email")
         password = request.data.get("password")
         if not email or not password:
