@@ -46,7 +46,7 @@ class UserRegisterView(BaseCORSExemptAPIView):
             user_mail = CompanyUserMails.objects.filter(email=email).first()
             if not user_mail:
                 return CustomResponse.error(
-                    message="Error creating user",
+                    # message="Error creating user",
                     errors="Contact HR - Invalid User",
                     status_code=status.HTTP_400_BAD_REQUEST,
                 )
