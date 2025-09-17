@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from app.auth import LoginAPIView, TokenRefreshUserView, VerifyAccessTokenView
 from app.views.company import CompanyUserMailsDetailView, MailListCreateView
-from app.views.roles import AccessTypesDetailView, AccessTypesListCreateView, RoleDetailView, RoleListCreateView
+from app.views.roles import AccessTypesDetailView, AccessTypesListCreateView, DesignationDetailView, DesignationListCreateView, RoleDetailView, RoleListCreateView
 from app.views.users import GoogleLogin, UserRegisterView, UsersDetailsList, UsersDetailsView
 
 api_attendance_urls = [
@@ -17,15 +17,16 @@ api_attendance_urls = [
     path("user/list/", UsersDetailsList.as_view(), name="user_list"),
     path("user/register/", UserRegisterView.as_view(), name="user_create"),
     path("user/update/", UsersDetailsView.as_view(), name="user_update"),
-    
-    # Role & Access
-    path("access-types/", AccessTypesListCreateView.as_view(), name="access_list_create"),
-    path("access-types/<int:pk>/", AccessTypesDetailView.as_view(), name="access-detail"),
-    path("role-create-list/", RoleListCreateView.as_view(), name="role-list"),
-    path("role-details/<int:pk>/", RoleDetailView.as_view(), name="role-detail"),
+    # Role,Designation & Access
+    path("access/types/", AccessTypesListCreateView.as_view(), name="access_list_create"),
+    path("access/types/<int:pk>/", AccessTypesDetailView.as_view(), name="access-detail"),
+    path("designation/", DesignationListCreateView.as_view(), name="designation_detail"),
+    path("designation/<int:pk>/", DesignationDetailView.as_view(), name="designation_update"), 
+    path("role/create_list", RoleListCreateView.as_view(), name="role-list"),
+    path("role/details/<int:pk>/", RoleDetailView.as_view(), name="role-detail"),
     # Company -Datils
-    path("mail-create-list/", MailListCreateView.as_view(), name="mail-list"),
-    path("mail-details/<int:pk>/", CompanyUserMailsDetailView.as_view(), name="mail-details"),
+    path("mail/create_list/", MailListCreateView.as_view(), name="mail-list"),
+    path("mail/details/<int:pk>/", CompanyUserMailsDetailView.as_view(), name="mail-details"),
     
     ]
 
