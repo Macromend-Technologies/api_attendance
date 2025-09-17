@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from app.auth import LoginAPIView, TokenRefreshUserView, VerifyAccessTokenView
 from app.views.company import CompanyUserMailsDetailView, MailListCreateView
 from app.views.roles import AccessTypesDetailView, AccessTypesListCreateView, RoleDetailView, RoleListCreateView
-from app.views.users import UserRegisterView, UsersListView
+from app.views.users import GoogleLogin, UserRegisterView, UsersDetailsList, UsersDetailsView
 
 api_attendance_urls = [
     # Auth 
@@ -12,9 +12,12 @@ api_attendance_urls = [
     path("token/access/", VerifyAccessTokenView.as_view(), name="verify_access"),
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    # User 
-    path("user-list/", UsersListView.as_view(), name="user_list"),
-    path("user-register/", UserRegisterView.as_view(), name="user_create"),
+    # User GoogleLogin
+    path("user/social_login/", GoogleLogin.as_view(), name="social_login"),
+    path("user/list/", UsersDetailsList.as_view(), name="user_list"),
+    path("user/register/", UserRegisterView.as_view(), name="user_create"),
+    path("user/update/", UsersDetailsView.as_view(), name="user_update"),
+    
     # Role & Access
     path("access-types/", AccessTypesListCreateView.as_view(), name="access_list_create"),
     path("access-types/<int:pk>/", AccessTypesDetailView.as_view(), name="access-detail"),
