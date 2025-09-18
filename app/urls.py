@@ -16,7 +16,7 @@ api_attendance_urls = [
     path("user/social_login/", GoogleLogin.as_view(), name="social_login"),
     path("user/list/", UsersDetailsList.as_view(), name="user_list"),
     path("user/register/", UserRegisterView.as_view(), name="user_create"),
-    path("user/update/", UsersDetailsView.as_view(), name="user_update"),
+    path("user/update/<int:pk>/", UsersDetailsView.as_view(), name="user_update"),
     
     # Role & Access
     path("access-types/", AccessTypesListCreateView.as_view(), name="access_list_create"),
