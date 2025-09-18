@@ -2,6 +2,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from app.auth import LoginAPIView, TokenRefreshUserView, VerifyAccessTokenView
 from app.views.company import CompanyUserMailsDetailView, MailListCreateView
+from app.views.developer import DeveloperCreateView, DeveloperLoginAPIView
 from app.views.roles import AccessTypesDetailView, AccessTypesListCreateView, RoleDetailView, RoleListCreateView
 from app.views.users import GoogleLogin, UserRegisterView, UsersDetailsList, UsersDetailsView
 
@@ -26,7 +27,10 @@ api_attendance_urls = [
     # Company -Datils
     path("mail-create-list/", MailListCreateView.as_view(), name="mail-list"),
     path("mail-details/<int:pk>/", CompanyUserMailsDetailView.as_view(), name="mail-details"),
-    
+    path("developer-create/",DeveloperCreateView.as_view(), name="developer_craete"),
+    path("developer-login/",DeveloperLoginAPIView.as_view(), name="developer_login"),
+
+
     ]
 
 urlpatterns =  api_attendance_urls

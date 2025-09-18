@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
  
 
 class AccessTypesListCreateView(BaseCORSExemptAPIView):
-    permission_classes = [IsAuthenticated]  # public access
+    permission_classes = []  # public access
 
     def get(self, request):
         """List all AccessTypes"""
@@ -46,7 +46,7 @@ class AccessTypesListCreateView(BaseCORSExemptAPIView):
 
 
 class AccessTypesDetailView(BaseCORSExemptAPIView):
-    permission_classes = [IsAuthenticated]  # public access
+    permission_classes = []  # public access
 
     def get_object(self, pk):
         try: 
@@ -111,7 +111,7 @@ class AccessTypesDetailView(BaseCORSExemptAPIView):
         )
 # ROLE CRUDS-FUNCTIONS
 class RoleListCreateView(BaseCORSExemptAPIView):
-    permission_classes = [IsAuthenticated]  # public access
+    permission_classes = []  # public access
 
     def get(self, request):
         """List all AccessTypes"""
