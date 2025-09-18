@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from app.models.role_model import AccessTypes, Roles
+from app.models.role_model import AccessTypes, Designation, Roles
  
 class AccessTypesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,13 +9,20 @@ class AccessTypesSerializer(serializers.ModelSerializer):
             "actions",
             "param",
         ]
-        
+class DesignationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Designation
+        fields = [
+            "id",
+            "name", 
+        ]
 class RolesSerializer(serializers.ModelSerializer):
     access = serializers.SlugRelatedField(
         many=True,
         slug_field="id",               # accept IDs when writing
         queryset=AccessTypes.objects.all()
     )
+
 
     class Meta:
         model = Roles
@@ -31,5 +38,5 @@ class RolesSerializer(serializers.ModelSerializer):
                     "actions": a.actions,
                     "param": a.param
                 } for a in instance.access.all()
-            ]
+            ]  
         }

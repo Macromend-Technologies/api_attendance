@@ -69,7 +69,7 @@ class CompanyUserMailsDetailView(BaseCORSExemptAPIView):
             status_code=status.HTTP_200_OK,
         )
 
-    def put(self, request, pk):
+    def patch(self, request, pk):
         """Update AccessType"""
         user_mail = self.get_object(pk)
         if not user_mail:

@@ -56,10 +56,12 @@ class UserRegisterView(BaseCORSExemptAPIView):
                 user = user_serializer.save()
                 user.set_password(password)
                 user.save()
-                # assign role from CompanyUserMails
                 if user_mail.role:
                     user.role = user_mail.role
-                    user.save()
+                    user.save(update_fields=["role"])  # more efficient
+
+                if user_mail.designation.exists():
+                    user.designation.set(user_mail.designation.all())
                 self.update_user_related_data(user, device_data, location_data)
  
             return CustomResponse.success(
@@ -146,7 +148,10 @@ class GoogleLogin(BaseCORSExemptAPIView):
                 # assign role from CompanyUserMails
                 if user_mail.role:
                     user.role = user_mail.role
-                    user.save()
+                    user.save(update_fields=["role"])  # more efficient
+
+                if user_mail.designation.exists():
+                    user.designation.set(user_mail.designation.all())
 
                 self.update_user_related_data(user, device_data, location_data)
                 tokens = self.generate_tokens(user)
