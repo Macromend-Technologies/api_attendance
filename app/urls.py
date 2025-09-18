@@ -3,6 +3,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from app.auth import LoginAPIView, TokenRefreshUserView, VerifyAccessTokenView
 from app.views.company import CompanyUserMailsDetailView, MailListCreateView
 from app.views.developer import DeveloperCreateView, DeveloperLoginAPIView
+from app.views.holiday import HolidayMappingCreate, HolidayMappingList
 from app.views.roles import AccessTypesDetailView, AccessTypesListCreateView, DesignationDetailView, DesignationListCreateView, RoleDetailView, RoleListCreateView
 from app.views.users import GoogleLogin, UserRegisterView, UsersDetailsList, UsersDetailsView
 
@@ -31,7 +32,9 @@ api_attendance_urls = [
     path("developer/create/",DeveloperCreateView.as_view(), name="developer_create"),
     path("developer/login/",DeveloperLoginAPIView.as_view(), name="developer_login"),
     # Holiday Mapping
-
+     
+    path("holiday/list/",HolidayMappingList.as_view(), name="holiday_mapping_list"),
+    path("holiday/create/",HolidayMappingCreate.as_view(), name="holiday_mapping_create"),
 
     ]
 
