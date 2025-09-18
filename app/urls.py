@@ -26,10 +26,11 @@ api_attendance_urls = [
     path("role/create_list", RoleListCreateView.as_view(), name="role-list"),
     path("role/details/<int:pk>/", RoleDetailView.as_view(), name="role-detail"),
     # Company -Datils
-    path("mail-create-list/", MailListCreateView.as_view(), name="mail-list"),
-    path("mail-details/<int:pk>/", CompanyUserMailsDetailView.as_view(), name="mail-details"),
-    path("developer-create/",DeveloperCreateView.as_view(), name="developer_craete"),
-    path("developer-login/",DeveloperLoginAPIView.as_view(), name="developer_login"),
+    path("mail/create-list/", MailListCreateView.as_view(), name="mail-list"),
+    path("mail/details/<int:pk>/", CompanyUserMailsDetailView.as_view(), name="mail-details"),
+    path("developer/create/",DeveloperCreateView.as_view(), name="developer_create"),
+    path("developer/login/",DeveloperLoginAPIView.as_view(), name="developer_login"),
+    # Holiday Mapping
 
 
     ]

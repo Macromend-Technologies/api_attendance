@@ -1,0 +1,28 @@
+.venv/
+.env
+*.pyc
+staticfiles/
+__pycache__/
+*.cpython-311.pyc
+*.cpython-312.pyc
+media/
+migrations/
+app/migrations/
+static_old/
+templates_old/
+.env
+logs/
+django.log
+.env.custom
+django_queries.log
+*.sql
+*.zip
+docker-compose.yaml
+*.sql
+Dockerfile
+# Generated client library (not required in repo)
+ 
+
+# Test artifacts and local tests (optional)
+.pytest_cache/
+ 
