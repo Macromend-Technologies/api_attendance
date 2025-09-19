@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated 
 
 class MailListCreateView(BaseCORSExemptAPIView):
-    permission_classes = [IsAuthenticated]  # public access
+    permission_classes = [ ]  # public access
 
     def get(self, request):
         """List all AccessTypes"""

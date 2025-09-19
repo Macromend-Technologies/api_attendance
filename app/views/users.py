@@ -1,6 +1,6 @@
 import random
 import string
-from app.auth import User
+from app.auth import CustomIsAuthenticated, User
 from app.core import BaseCORSExemptAPIView
 from app.models.user_model import CustomUser
 from app.models.usermail_model import CompanyUserMails
@@ -169,7 +169,7 @@ class GoogleLogin(BaseCORSExemptAPIView):
             )
 
 class UsersDetailsList(BaseCORSExemptAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [CustomIsAuthenticated]
 
     def get(self, request, ):
         """Retrieve single user or all users"""
