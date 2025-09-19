@@ -8,7 +8,7 @@ class Developer(BaseModel):
     email = models.EmailField(unique=True, null=False, blank=False)
     is_super = models.BooleanField(default=True) 
     password = models.CharField(max_length=128) 
-
+    
     def save(self, *args, **kwargs):
         if not self.password.startswith('pbkdf2_'):
             self.password = make_password(self.password)
