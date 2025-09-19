@@ -4,6 +4,7 @@ from app.auth import LoginAPIView, TokenRefreshUserView, VerifyAccessTokenView
 from app.views.company import CompanyUserMailsDetailView, MailListCreateView
 from app.views.developer import DeveloperCreateView, DeveloperLoginAPIView
 from app.views.holiday import HolidayMappingCreate, HolidayMappingList
+from app.views.leaves import LeaveRequestView
 from app.views.roles import AccessTypesDetailView, AccessTypesListCreateView, DesignationDetailView, DesignationListCreateView, RoleDetailView, RoleListCreateView
 from app.views.users import GoogleLogin, UserRegisterView, UsersDetailsList, UsersDetailsView
 
@@ -35,7 +36,13 @@ api_attendance_urls = [
      
     path("holiday/list/",HolidayMappingList.as_view(), name="holiday_mapping_list"),
     path("holiday/create/",HolidayMappingCreate.as_view(), name="holiday_mapping_create"),
-
+    
+    
+    # Leaves
+    
+    path("leave/request/",LeaveRequestView.as_view(), name="leave_request"),
+    
+    
     ]
 
 urlpatterns =  api_attendance_urls
