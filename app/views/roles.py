@@ -113,7 +113,7 @@ class AccessTypesDetailView(BaseCORSExemptAPIView):
 
 # Designation CRUDS-FUNCTIONS
 class DesignationListCreateView(BaseCORSExemptAPIView):
-    permission_classes = [IsAuthenticated]  # public access
+    permission_classes = [ ]  # public access
 
     def get(self, request):
         """List all AccessTypes"""

@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
+from app.auth import CustomIsAuthenticated
 from app.core import BaseCORSExemptAPIView
 from app.models.developer_model import Developer
 from app.response import CustomResponse
@@ -48,7 +49,7 @@ class DeveloperLoginAPIView(BaseCORSExemptAPIView):
         except Developer.DoesNotExist:
             return Response(
                 {"success": False, "error": "Invalid login credentials."},
-                status=status.HTTP_401_UNAUTHORIZED,
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         # Check the hashed password

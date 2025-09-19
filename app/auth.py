@@ -6,9 +6,12 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from app.core import BaseCORSExemptAPIView
+from app.models.user_model import CustomUser
 from app.response import CustomResponse
 from app.serializers.users import UserSerializer
- 
+from rest_framework.permissions import BasePermission
+from app.models.developer_model import Developer  
+
 # Login  
 class LoginAPIView(BaseCORSExemptAPIView):
     permission_classes = [ ]
@@ -150,3 +153,26 @@ class VerifyAccessTokenView(BaseCORSExemptAPIView):
                 {"error": "User not found.", "success": False},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+
+class CustomIsAuthenticated(BasePermission):
+    """
+    Custom authentication:
+    - Allow both CustomUser & Developer
+    - Must exist in either table
+    - If Developer.is_super=True → full access
+    """
+
+    def has_permission(self, request, view):
+        user = request.user
+
+        # Case 1: Developer user
+        if isinstance(user, Developer):
+            return True   # super ஆனாலும் இல்லாவிட்டாலும் allow
+
+        # Case 2: CustomUser (Django user)
+        if isinstance(user, CustomUser):
+            return user.is_authenticated
+
+        # If none of the above
+        return False
