@@ -3,12 +3,9 @@ from django.db import models
 import datetime
 
 class Holidays(BaseModel):
-    year = models.IntegerField(unique=True, default=datetime.date.today().year)
-   
-    
+    year = models.IntegerField(unique=True, default=datetime.date.today().year) 
     def __str__(self):
         return  str(self.year)
-    
     
 class HolidayMonthsDates(BaseModel):
     year = models.ForeignKey("app.Holidays", on_delete=models.CASCADE, related_name="holidays_year",null=True)
