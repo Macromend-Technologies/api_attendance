@@ -10,7 +10,7 @@ from django.contrib.auth.models import (
 from app.models.base_model import BaseModel
 from django.utils import timezone
 import uuid
-from app.models.role_model import Designation, Roles
+from app.models.role_model import Designation
  
 class CustomUserManager(BaseUserManager):
 
