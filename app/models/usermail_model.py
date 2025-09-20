@@ -4,8 +4,8 @@ from app.models.role_model import Designation, Roles
 
 class CompanyUserMails(BaseModel):
     email =models.EmailField(unique=True,null=False,max_length=50)
-    role = models.ForeignKey("app.Roles", on_delete=models.CASCADE, related_name="user_mails",null=True)
-    designation = models.ManyToManyField( Designation,related_name="designations_mails",blank=True)  
+    designation = models.ForeignKey("app.Designation", on_delete=models.CASCADE, related_name="user_designation",null=True)
+    role = models.ManyToManyField("app.Roles" ,related_name="company_role",blank=True)  
     is_active =models.BooleanField(default=False)
  
     def __str__(self):

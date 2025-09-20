@@ -2,33 +2,35 @@ from rest_framework import serializers
 from app.models.role_model import Designation, Roles
 from app.models.usermail_model import CompanyUserMails
  
-class CompanyUserMailsSerializer(serializers.ModelSerializer):
+class CompanyUserMailsCreateSerializer(serializers.ModelSerializer):
     role = serializers.PrimaryKeyRelatedField(
+        many=True,
         queryset=Roles.objects.all()
     )
-    designation = serializers.SlugRelatedField(
-        many=True,
-        slug_field="id",               # accept IDs when writing
+    designation = serializers.PrimaryKeyRelatedField(
         queryset=Designation.objects.all()
     )
+    
     class Meta:
         model = CompanyUserMails
-        fields = [
-            "id",
-            "email",
-            "role",
-            "designation"
-        ]
-    def to_representation(self, instance):
-        response = super().to_representation(instance)
-        response["role"] = {
-            "id": instance.role.id,
-            "name": instance.role.name
-        }
-        response["designation"]=[
-                {
-                    "id": a.id,
-                    "designation": a.name,
-                }for a in instance.designation.all() 
-            ]
-        return response
+        fields = ["id", "email", "role", "designation"]
+
+    def create(self, validated_data):
+        roles = validated_data.pop("role", [])
+        user = CompanyUserMails.objects.create(**validated_data)
+        user.save()
+        if roles:
+            user.role.set(roles)
+        return user
+    
+class CompanyUserMailsListSerializer(serializers.ModelSerializer):
+    role = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field="name"   # shows role names
+    )
+    designation = serializers.StringRelatedField()  # shows designation name
+
+    class Meta:
+        model = CompanyUserMails
+        fields = ["id", "email", "role", "designation"]

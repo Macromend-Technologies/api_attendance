@@ -10,7 +10,7 @@ from django.contrib.auth.models import (
 from app.models.base_model import BaseModel
 from django.utils import timezone
 import uuid
-from app.models.role_model import Designation, Roles
+from app.models.role_model import Designation
  
 class CustomUserManager(BaseUserManager):
 
@@ -41,8 +41,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin,BaseModel):
     name  = models.CharField(max_length=25,null=False,blank=False)
     email =models.EmailField(unique=True,null=False,max_length=50)
     mobile =models.IntegerField(unique=True,null=True ,blank=False)
-    role = models.ForeignKey("app.Roles", on_delete=models.CASCADE, related_name="user_role",null=True)
-    designation = models.ManyToManyField( Designation,related_name="designations",blank=True)  
+    role = models.ManyToManyField( "app.Roles",related_name="user_role",blank=True) 
+    designation = models.ForeignKey("app.Designation", on_delete=models.CASCADE, related_name="designations",null=True) 
     is_staff = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)

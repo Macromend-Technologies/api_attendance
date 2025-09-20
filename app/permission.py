@@ -7,21 +7,16 @@ from app.models.developer_model import Developer
 from django.contrib.auth import get_user_model
 CustomUser = get_user_model()
 class DeveloperJWTAuthentication(JWTAuthentication):
- 
     def get_user(self, validated_token):
         try:
             user_id = validated_token[api_settings.USER_ID_CLAIM]
         except KeyError:
             raise InvalidToken("Token contained no recognizable user identification")
 
-        # 1. Try Developer
-        try:
-            return Developer.objects.get(id=user_id)
-        except Developer.DoesNotExist:
-            pass
-
-        # 2. Try CustomUser (default user model)
-        try:
-            return CustomUser.objects.get(id=user_id)
-        except CustomUser.DoesNotExist:
+        user = (
+            Developer.objects.filter(id=user_id).first()
+            or CustomUser.objects.filter(id=user_id).first()
+        )
+        if not user:
             raise AuthenticationFailed("User not found", code="user_not_found")
+        return user

@@ -1,19 +1,19 @@
 from app.core import BaseCORSExemptAPIView
-from app.models.role_model import AccessTypes, Designation, Roles
+from app.models.role_model import Access, Designation, Roles
 from app.response import CustomResponse
-from app.serializers.roles import  AccessTypesSerializer, DesignationSerializer, RolesSerializer
+from app.serializers.roles import  AccessDetailsSerializer, AccessSerializer, DesignationSerializer, RolesDetailsSerializer, RolesSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
  
 
-class AccessTypesListCreateView(BaseCORSExemptAPIView):
+class AccessListCreateView(BaseCORSExemptAPIView):
     permission_classes = []  # public access
 
     def get(self, request):
         """List all AccessTypes"""
         try:
-            access_list = AccessTypes.objects.all()
-            serializer = AccessTypesSerializer(access_list, many=True)
+            access_list = Access.objects.all()
+            serializer = AccessDetailsSerializer(access_list, many=True)
             return CustomResponse.success(
                 data=serializer.data,
                 message="Access list retrieved successfully",
@@ -29,7 +29,7 @@ class AccessTypesListCreateView(BaseCORSExemptAPIView):
     def post(self, request):
         """Create new AccessType"""
         try:
-            serializer = AccessTypesSerializer(data=request.data)
+            serializer = AccessSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return CustomResponse.success(
@@ -45,70 +45,70 @@ class AccessTypesListCreateView(BaseCORSExemptAPIView):
             )
 
 
-class AccessTypesDetailView(BaseCORSExemptAPIView):
-    permission_classes = []  # public access
+# class AccessTypesDetailView(BaseCORSExemptAPIView):
+#     permission_classes = []  # public access
 
-    def get_object(self, pk):
-        try: 
-            return AccessTypes.objects.get(pk=pk)
-        except AccessTypes.DoesNotExist:
-            return None
+#     def get_object(self, pk):
+#         try: 
+#             return AccessTypes.objects.get(pk=pk)
+#         except AccessTypes.DoesNotExist:
+#             return None
 
-    def get(self, request, pk):
-        """Retrieve single AccessType"""
-        access = self.get_object(pk)
-        if not access:
-            return CustomResponse.error(
-                message="Access not found",
-                errors=f"Access with id {pk} not found",
-                status_code=status.HTTP_404_NOT_FOUND,
-            )
-        serializer = AccessTypesSerializer(access)
-        return CustomResponse.success(
-            data=serializer.data,
-            message="Access retrieved successfully",
-            status_code=status.HTTP_200_OK,
-        )
+#     def get(self, request, pk):
+#         """Retrieve single AccessType"""
+#         access = self.get_object(pk)
+#         if not access:
+#             return CustomResponse.error(
+#                 message="Access not found",
+#                 errors=f"Access with id {pk} not found",
+#                 status_code=status.HTTP_404_NOT_FOUND,
+#             )
+#         serializer = AccessTypesSerializer(access)
+#         return CustomResponse.success(
+#             data=serializer.data,
+#             message="Access retrieved successfully",
+#             status_code=status.HTTP_200_OK,
+#         )
 
-    def put(self, request, pk):
-        """Update AccessType"""
-        access = self.get_object(pk)
-        if not access:
-            return CustomResponse.error(
-                message="Access not found",
-                errors=f"Access with id {pk} not found",
-                status_code=status.HTTP_404_NOT_FOUND,
-            )
-        serializer = AccessTypesSerializer(access, data=request.data, partial=True)
-        try:
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return CustomResponse.success(
-                data=serializer.data,
-                message="Access updated successfully",
-                status_code=status.HTTP_200_OK,
-            )
-        except Exception as e:
-            return CustomResponse.error(
-                message="Error updating Access",
-                errors=str(e),
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
+#     def put(self, request, pk):
+#         """Update AccessType"""
+#         access = self.get_object(pk)
+#         if not access:
+#             return CustomResponse.error(
+#                 message="Access not found",
+#                 errors=f"Access with id {pk} not found",
+#                 status_code=status.HTTP_404_NOT_FOUND,
+#             )
+#         serializer = AccessTypesSerializer(access, data=request.data, partial=True)
+#         try:
+#             serializer.is_valid(raise_exception=True)
+#             serializer.save()
+#             return CustomResponse.success(
+#                 data=serializer.data,
+#                 message="Access updated successfully",
+#                 status_code=status.HTTP_200_OK,
+#             )
+#         except Exception as e:
+#             return CustomResponse.error(
+#                 message="Error updating Access",
+#                 errors=str(e),
+#                 status_code=status.HTTP_400_BAD_REQUEST,
+#             )
 
-    def delete(self, request, pk):
-        """Delete AccessType"""
-        access = self.get_object(pk)
-        if not access:
-            return CustomResponse.error(
-                message="Access not found",
-                errors=f"Access with id {pk} not found",
-                status_code=status.HTTP_404_NOT_FOUND,
-            )
-        access.delete()
-        return CustomResponse.success(
-            message="Access deleted successfully",
-            status_code=status.HTTP_204_NO_CONTENT,
-        )
+#     def delete(self, request, pk):
+#         """Delete AccessType"""
+#         access = self.get_object(pk)
+#         if not access:
+#             return CustomResponse.error(
+#                 message="Access not found",
+#                 errors=f"Access with id {pk} not found",
+#                 status_code=status.HTTP_404_NOT_FOUND,
+#             )
+#         access.delete()
+#         return CustomResponse.success(
+#             message="Access deleted successfully",
+#             status_code=status.HTTP_204_NO_CONTENT,
+#         )
 
 
 # Designation CRUDS-FUNCTIONS
@@ -150,7 +150,7 @@ class DesignationListCreateView(BaseCORSExemptAPIView):
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 class DesignationDetailView(BaseCORSExemptAPIView):
-    permission_classes = [IsAuthenticated]  # public access
+    permission_classes = []  # public access
 
     def get_object(self, pk):
         try: 
@@ -222,7 +222,7 @@ class RoleListCreateView(BaseCORSExemptAPIView):
         """List all AccessTypes"""
         try:
             role_list = Roles.objects.all()
-            serializer = RolesSerializer(role_list, many=True)
+            serializer = RolesDetailsSerializer(role_list, many=True)
             return CustomResponse.success(
                 data=serializer.data,
                 message="Roles list retrieved successfully",

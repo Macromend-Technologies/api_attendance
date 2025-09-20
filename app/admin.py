@@ -2,18 +2,19 @@ from django.contrib import admin
 from app.models.developer_model import Developer
 from app.models.device_model import UserDevices, UserLocation
 from app.models.holiday_model import HolidayMonthsDates, Holidays
-from app.models.role_model import AccessTypes, Designation, Roles
+from app.models.leaves_model import LeaveType, Leaves, LeavesDates
+from app.models.role_model import Access, AccessItems, Actions, Designation, Roles
 from app.models.user_model import CustomUser
 from app.models.usermail_model import CompanyUserMails
  
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ["id","name", "email","mobile", "role","designations"]
+    list_display = ["id","name", "email","mobile", "role","designation"]
     search_fields = ["name","email"]
-    list_filter = ["role"]
-    def designations(self, obj):
-        return ", ".join([d.name for d in obj.designation.all()])  
-    designations.short_description = "designation"
+    list_filter = ["designation"]
+    def role(self, obj):
+        return ", ".join([d.name for d in obj.role.all()])  
+    role.short_description = "role"
     
 @admin.register(UserDevices)
 class UserDevicesAdmin(admin.ModelAdmin):
@@ -22,20 +23,19 @@ class UserDevicesAdmin(admin.ModelAdmin):
 @admin.register(UserLocation)
 class UserLocationAdmin(admin.ModelAdmin):
     list_display = ["id", "user", "latitude","longitude"]
-
+    
+admin.site.register(Access)
+admin.site.register(AccessItems)
+admin.site.register(Actions)
 admin.site.register(Roles)
-@admin.register(AccessTypes)
-class AccessTypesAdmin(admin.ModelAdmin):
-    list_display = ["id", "param", "actions"]
-
-
+ 
 @admin.register(CompanyUserMails)
 class CompanyUserMailsAdmin(admin.ModelAdmin):
-    list_display = ["id", "email", "role", "designations"]
-    def designations(self, obj):
-        return ", ".join([d.name for d in obj.designation.all()])
+    list_display = ["id", "email", "roles", "designation"]
+    def roles(self, obj):
+        return ", ".join([d.name for d in obj.role.all()])
     
-    designations.short_description = "Designations"
+    roles.short_description = "roles"
 
 
 @admin.register(Designation)
@@ -56,7 +56,15 @@ class HolidayMonthsDatesAdmin(admin.ModelAdmin):
     list_display = ["id", "year", "date", "month", "purpose"]
 
 
-
-
+# Leave Part
+admin.site.register(LeaveType)
+ 
+@admin.register(Leaves)
+class LeavesAdmin(admin.ModelAdmin):
+    list_display = ["id", "user", "status","purpose","reviewer", "reviewer_status", "purpose","leave_type","date_range"]
+    search_fields = ["user","reviewer","status"]
+    list_filter = ["status","reviewer_status","leave_type"]
+    
+admin.site.register(LeavesDates)
 
 
