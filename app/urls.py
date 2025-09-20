@@ -4,7 +4,7 @@ from app.auth import LoginAPIView, TokenRefreshUserView, VerifyAccessTokenView
 from app.views.company import CompanyUserMailsDetailView, MailListCreateView
 from app.views.developer import DeveloperCreateView, DeveloperLoginAPIView
 from app.views.holiday import HolidayMappingCreate, HolidayMappingList
-from app.views.leaves import LeaveRequestView
+from app.views.leaves import LeaveRequestListView, LeaveRequestView, LeaveTypeListCreateView, LeaveTypesDetailView
 from app.views.roles import  AccessListCreateView, DesignationDetailView, DesignationListCreateView, RoleDetailView, RoleListCreateView
 from app.views.users import GoogleLogin, UserRegisterView, UsersDetailsList, UsersDetailsView
 
@@ -52,9 +52,16 @@ api_attendance_urls = [
     
     
     # Leaves
-    
     path("leave/request/",LeaveRequestView.as_view(), name="leave_request"),
+    path("leave/list/",LeaveRequestListView.as_view(), name="leave_list"),
     
+    
+    # Leave Types
+    path("leave_type/list/",LeaveTypeListCreateView.as_view(), name="leave_type_list"),
+    path("leave_type/create/",LeaveTypeListCreateView.as_view(), name="leave_type_create"),
+    path("leave_type/detail/<int:pk>/",LeaveTypesDetailView.as_view(), name="leave_type_detail"),
+    path("leave_type/update/<int:pk>/",LeaveTypesDetailView.as_view(), name="leave_type_update"), 
+    path("leave_type/delete/<int:pk>/",LeaveTypesDetailView.as_view(), name="leave_type_delete"),
     
     ]
 

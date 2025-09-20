@@ -44,73 +44,7 @@ class AccessListCreateView(BaseCORSExemptAPIView):
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
-
-# class AccessTypesDetailView(BaseCORSExemptAPIView):
-#     permission_classes = []  # public access
-
-#     def get_object(self, pk):
-#         try: 
-#             return AccessTypes.objects.get(pk=pk)
-#         except AccessTypes.DoesNotExist:
-#             return None
-
-#     def get(self, request, pk):
-#         """Retrieve single AccessType"""
-#         access = self.get_object(pk)
-#         if not access:
-#             return CustomResponse.error(
-#                 message="Access not found",
-#                 errors=f"Access with id {pk} not found",
-#                 status_code=status.HTTP_404_NOT_FOUND,
-#             )
-#         serializer = AccessTypesSerializer(access)
-#         return CustomResponse.success(
-#             data=serializer.data,
-#             message="Access retrieved successfully",
-#             status_code=status.HTTP_200_OK,
-#         )
-
-#     def put(self, request, pk):
-#         """Update AccessType"""
-#         access = self.get_object(pk)
-#         if not access:
-#             return CustomResponse.error(
-#                 message="Access not found",
-#                 errors=f"Access with id {pk} not found",
-#                 status_code=status.HTTP_404_NOT_FOUND,
-#             )
-#         serializer = AccessTypesSerializer(access, data=request.data, partial=True)
-#         try:
-#             serializer.is_valid(raise_exception=True)
-#             serializer.save()
-#             return CustomResponse.success(
-#                 data=serializer.data,
-#                 message="Access updated successfully",
-#                 status_code=status.HTTP_200_OK,
-#             )
-#         except Exception as e:
-#             return CustomResponse.error(
-#                 message="Error updating Access",
-#                 errors=str(e),
-#                 status_code=status.HTTP_400_BAD_REQUEST,
-#             )
-
-#     def delete(self, request, pk):
-#         """Delete AccessType"""
-#         access = self.get_object(pk)
-#         if not access:
-#             return CustomResponse.error(
-#                 message="Access not found",
-#                 errors=f"Access with id {pk} not found",
-#                 status_code=status.HTTP_404_NOT_FOUND,
-#             )
-#         access.delete()
-#         return CustomResponse.success(
-#             message="Access deleted successfully",
-#             status_code=status.HTTP_204_NO_CONTENT,
-#         )
-
-
+ 
 # Designation CRUDS-FUNCTIONS
 class DesignationListCreateView(BaseCORSExemptAPIView):
     permission_classes = [ ]  # public access
