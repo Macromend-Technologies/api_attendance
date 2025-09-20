@@ -1,7 +1,7 @@
 from app.core import BaseCORSExemptAPIView
 from app.models.usermail_model import CompanyUserMails
 from app.response import CustomResponse
-from app.serializers.company import CompanyUserMailsSerializer
+from app.serializers.company import CompanyUserMailsCreateSerializer, CompanyUserMailsListSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated 
 
@@ -12,7 +12,7 @@ class MailListCreateView(BaseCORSExemptAPIView):
         """List all AccessTypes"""
         try:
             mails_list = CompanyUserMails.objects.all()
-            serializer = CompanyUserMailsSerializer(mails_list, many=True)
+            serializer = CompanyUserMailsListSerializer(mails_list, many=True)
             return CustomResponse.success(
                 data=serializer.data,
                 message="User mail list retrieved successfully",
@@ -28,7 +28,7 @@ class MailListCreateView(BaseCORSExemptAPIView):
     def post(self, request):
         """Create new AccessType"""
         try:
-            serializer = CompanyUserMailsSerializer(data=request.data)
+            serializer = CompanyUserMailsCreateSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return CustomResponse.success(

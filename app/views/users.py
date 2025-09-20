@@ -5,7 +5,7 @@ from app.core import BaseCORSExemptAPIView
 from app.models.user_model import CustomUser
 from app.models.usermail_model import CompanyUserMails
 from app.response import CustomResponse
-from app.serializers.users import DevicesSerializer, LocationSerializer, UserSerializer
+from app.serializers.users import DevicesSerializer, LocationSerializer, UserDetailsSerializer, UserListSerializer, UserSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
@@ -56,12 +56,12 @@ class UserRegisterView(BaseCORSExemptAPIView):
                 user = user_serializer.save()
                 user.set_password(password)
                 user.save()
-                if user_mail.role:
-                    user.role = user_mail.role
-                    user.save(update_fields=["role"])  # more efficient
+                if user_mail.designation:
+                    user.designation = user_mail.designation
+                    user.save(update_fields=["designation"])  # more efficient
 
-                if user_mail.designation.exists():
-                    user.designation.set(user_mail.designation.all())
+                if user_mail.role.exists():
+                    user.role.set(user_mail.role.all())
                 self.update_user_related_data(user, device_data, location_data)
  
             return CustomResponse.success(
@@ -146,12 +146,12 @@ class GoogleLogin(BaseCORSExemptAPIView):
                 user.set_password(self.generate_password())
                 user.save()
                 # assign role from CompanyUserMails
-                if user_mail.role:
-                    user.role = user_mail.role
-                    user.save(update_fields=["role"])  # more efficient
+                if user_mail.designation:
+                    user.designation = user_mail.designation
+                    user.save(update_fields=["designation"])  # more efficient
 
-                if user_mail.designation.exists():
-                    user.designation.set(user_mail.designation.all())
+                if user_mail.role.exists():
+                    user.role.set(user_mail.role.all())
 
                 self.update_user_related_data(user, device_data, location_data)
                 tokens = self.generate_tokens(user)
@@ -169,13 +169,13 @@ class GoogleLogin(BaseCORSExemptAPIView):
             )
 
 class UsersDetailsList(BaseCORSExemptAPIView):
-    permission_classes = [CustomIsAuthenticated]
+    permission_classes = [ ]
 
     def get(self, request, ):
         """Retrieve single user or all users"""
         try:
             users = CustomUser.objects.all()
-            serializer = UserSerializer(users, many=True)
+            serializer = UserListSerializer(users, many=True)
             return CustomResponse.success(
                 data=serializer.data,
                 message="Users retrieved successfully.",
@@ -194,13 +194,13 @@ class UsersDetailsList(BaseCORSExemptAPIView):
             )
             
 class UsersDetailsView(BaseCORSExemptAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     def get(self, request, pk=None):
         """Retrieve single user or all users"""
         try:
             if pk:
                 user = CustomUser.objects.get(pk=pk)
-                serializer = UserSerializer(user)
+                serializer = UserDetailsSerializer(user)
                 return CustomResponse.success(
                     data=serializer.data,
                     message="User retrieved successfully.",
