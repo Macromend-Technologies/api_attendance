@@ -1,6 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from app.auth import LoginAPIView, TokenRefreshUserView, VerifyAccessTokenView
+from app.views.Attendance import  AttendanceMarkView
 from app.views.company import CompanyUserMailsDetailView, MailListCreateView
 from app.views.developer import DeveloperCreateView, DeveloperLoginAPIView
 from app.views.holiday import HolidayMappingCreate, HolidayMappingList
@@ -18,7 +19,8 @@ api_attendance_urls = [
     path("user/social_login/", GoogleLogin.as_view(), name="social_login"),
     path("user/list/", UsersDetailsList.as_view(), name="user_list"),
     path("user/register/", UserRegisterView.as_view(), name="user_create"),
-    path("user/update/<int:pk>/", UsersDetailsView.as_view(), name="user_update"),
+    path("user/profile/<int:pk>/", UsersDetailsView.as_view(), name="user_update"),
+   
     # Role,Designation & Access
     path("access/types/", AccessTypesListCreateView.as_view(), name="access_list_create"),
     path("access/types/<int:pk>/", AccessTypesDetailView.as_view(), name="access-detail"),
@@ -35,6 +37,9 @@ api_attendance_urls = [
      
     path("holiday/list/",HolidayMappingList.as_view(), name="holiday_mapping_list"),
     path("holiday/create/",HolidayMappingCreate.as_view(), name="holiday_mapping_create"),
+
+    # attendance mark
+    path("attendance/mark",AttendanceMarkView.as_view(),name="attendance_marking")
 
     ]
 

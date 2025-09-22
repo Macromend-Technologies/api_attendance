@@ -5,6 +5,7 @@ from app.models.holiday_model import HolidayMonthsDates, Holidays
 from app.models.role_model import AccessTypes, Designation, Roles
 from app.models.user_model import CustomUser
 from app.models.usermail_model import CompanyUserMails
+from app.models.attendence_model import Attendance
  
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
