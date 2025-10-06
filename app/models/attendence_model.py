@@ -18,6 +18,11 @@ class Attendance(BaseModel):
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     fingerprint = models.CharField(max_length=100, null=True, blank=True)
+    
+    
   
     def __str__(self):
         return f"{self.user.name} - {self.mark_type} - {self.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
+
+
+ 
